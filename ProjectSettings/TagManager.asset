@@ -11,8 +11,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - AttackCircle
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: BackGround
     uniqueID: 1989771199
+    locked: 0
+  - name: AttackCircle
+    uniqueID: 244799619
     locked: 0
   - name: Default
     uniqueID: 0

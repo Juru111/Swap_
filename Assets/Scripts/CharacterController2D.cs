@@ -4,16 +4,21 @@ using UnityEngine.Events;
 public class CharacterController2D : MonoBehaviour
 {
 	[SerializeField] private float m_JumpForce = 400f;							// Amount of force added when the player jumps.
-	[Range(0, 1)] [SerializeField] private float m_AttackSpeed = .36f;			// Amount of maxSpeed applied to Attacking movement. 1 = 100%
 	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
 	[SerializeField] private bool m_AirControl = false;							// Whether or not a player can steer while jumping;
-	[SerializeField] private LayerMask m_WhatIsGround;							// A mask determining what is ground to the character                  
+	[SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
+	[SerializeField] private LayerMask m_WhatIsPlayer;
 	[SerializeField] private Transform m_GroundCheckA;                          // A position marking where to check if the player is grounded.
-	[SerializeField] private Transform m_GroundCheckB;							// Same as above
+	[SerializeField] private Transform m_GroundCheckB;                          // Same as above
+	[SerializeField] private Transform m_CeilingCheckA;                         // A position marking where to check is there another player above.
+	[SerializeField] private Transform m_CeilingCheckB;                         // Same as above
+
 	[SerializeField] private Collider2D m_AttackDisableCollider;				// A collider that will be disabled when Attacking
 
 	const float k_GroundedDepth = .1f;  // Depth of the overlap line (area) to determine if grounded
+	const float k_CeilingDepth = .1f;  // Depth of the overlap line (area) to determine is there another player above.
 	public bool m_Grounded { private set; get; }            // Whether or not the player is grounded.
+	private bool m_JumpBloced;           // Whether or not the player jump is blocked by other player.
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
@@ -40,6 +45,7 @@ public class CharacterController2D : MonoBehaviour
 			OnAttackEvent = new BoolEvent();
 
 		m_GroundCheckB.position += new Vector3(0f, k_GroundedDepth, 0f); // Adding depth to line of ground check => area check
+		m_CeilingCheckB.position -= new Vector3(0f, k_CeilingDepth, 0f); // Adding depth to line of celling check => area check
 	}
 
 	private void FixedUpdate()
@@ -49,14 +55,28 @@ public class CharacterController2D : MonoBehaviour
 
 		// The player is grounded if a areacast to the groundcheck area hits anything designated as ground
 		// This can be done using layers instead but Sample Assets will not overwrite your project settings.
-		Collider2D[] colliders = Physics2D.OverlapAreaAll(m_GroundCheckA.position, m_GroundCheckB.position, m_WhatIsGround);
-		for (int i = 0; i < colliders.Length; i++)
+		Collider2D[] groundColliders = Physics2D.OverlapAreaAll(m_GroundCheckA.position, m_GroundCheckB.position, m_WhatIsGround);
+		for (int i = 0; i < groundColliders.Length; i++)
 		{
-			if (colliders[i].gameObject != gameObject)
+			if (groundColliders[i].gameObject != gameObject)
 			{
 				m_Grounded = true;
 				if (!wasGrounded)
 					OnLandEvent.Invoke();
+			}
+		}
+
+
+
+		m_JumpBloced = false;
+
+		// The player is JumpBloced if a areacast to the cellingcheck area hits anything designated as player
+		Collider2D[] cellingColliders = Physics2D.OverlapAreaAll(m_CeilingCheckA.position, m_CeilingCheckB.position, m_WhatIsPlayer);
+		for (int i = 0; i < cellingColliders.Length; i++)
+		{
+			if (cellingColliders[i].gameObject != gameObject)
+			{
+				m_JumpBloced = true;
 			}
 		}
 	}
@@ -64,20 +84,9 @@ public class CharacterController2D : MonoBehaviour
 
 	public void Move(float move, bool Attack, bool jump)
 	{
-		// If Attacking, check to see if the character can stand up
-		//if (!Attack)
-		//{
-		//	 If the character has a ceiling preventing them from standing up, keep them Attacking
-		//	if (Physics2D.OverlapCircle(m_CeilingCheck.position, k_CeilingRadius, m_WhatIsGround))
-		//	{
-		//		Attack = true;
-		//	}
-		//}
-
 		//only control the player if grounded or airControl is turned on
 		if (m_Grounded || m_AirControl)
 		{
-
 			// If Attacking
 			if (Attack)
 			{
@@ -87,8 +96,8 @@ public class CharacterController2D : MonoBehaviour
 					OnAttackEvent.Invoke(true);
 				}
 
-				// Reduce the speed by the AttackSpeed multiplier
-				move *= m_AttackSpeed;
+				// Freeze player in position
+				m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
 
 				//// Disable one of the colliders when Attacking
 				//if (m_AttackDisableCollider != null)
@@ -104,6 +113,8 @@ public class CharacterController2D : MonoBehaviour
 					m_wasAttacking = false;
 					OnAttackEvent.Invoke(false);
 				}
+
+				m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 			}
 
 			// Move the character by finding the target velocity
@@ -125,7 +136,7 @@ public class CharacterController2D : MonoBehaviour
 			}
 		}
 		// If the player should jump...
-		if (m_Grounded && jump)
+		if (m_Grounded && jump && !m_JumpBloced)
 		{
 			// Add a vertical force to the player.
 			m_Grounded = false;
