@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : MonoBehaviour
+public class Player : MonoBehaviour
 {
     [SerializeField]
     private InputConfig myInputConfig;
@@ -16,17 +16,14 @@ public class PlayerManager : MonoBehaviour
     [SerializeField]
     private float jumpCooldown = 0.5f;
 
+    public ItemTypes itemHeld { private set; get; } = ItemTypes.NONE;
+    public ItemColors itemHeldColor { private set; get; } = ItemColors.NONE;
+
     private float h_Movement = 0f;
     private bool jump = false;
+    private bool grab = false;
     private float jumpCooldownLeft = 0f;
     private bool isAttacking = false;
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     private void Update()
@@ -38,6 +35,10 @@ public class PlayerManager : MonoBehaviour
         if (Input.GetKey(myInputConfig.AttackKey))
         {
             isAttacking = true;
+        }
+        if (Input.GetKeyDown(myInputConfig.GrabKey))
+        {
+            grab = true;
         }
 
         attackCircleAnimator.SetBool("isAttacking", isAttacking);
@@ -53,16 +54,14 @@ public class PlayerManager : MonoBehaviour
         CalculateHorizontalMovment();
         jumpCooldownLeft -= Time.fixedDeltaTime;
 
-        controller.Move(h_Movement * Time.fixedDeltaTime, isAttacking, jump);
+        controller.Move(h_Movement * Time.fixedDeltaTime, isAttacking, jump, grab);
         if(jump)
         {
             jump = false;
             jumpCooldownLeft = jumpCooldown;
         }
-        if(isAttacking)
-        {
-            isAttacking = false;
-        }
+        isAttacking = false;
+        grab = false;
     }
 
     private void CalculateHorizontalMovment()
@@ -77,5 +76,12 @@ public class PlayerManager : MonoBehaviour
             h_Movement++;
         }
         h_Movement *= runSpeed;
+    }
+
+    public void SetMyItem(ItemTypes itemType, ItemColors itemColor)
+    {
+        itemHeld = itemType;
+        itemHeldColor = itemColor;
+        //tu mo¿na dodaæ te¿ w³¹cznie wizualnego indyfikatora trzymanego przedmiotu
     }
 }

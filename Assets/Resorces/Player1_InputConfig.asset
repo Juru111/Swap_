@@ -16,3 +16,4 @@ MonoBehaviour:
   leftKey: 97
   rightKey: 100
   attackKey: 115
+  grabKey: 101

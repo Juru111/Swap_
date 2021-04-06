@@ -1,27 +1,38 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class CharacterController2D : MonoBehaviour
 {
 	[SerializeField] private float m_JumpForce = 400f;							// Amount of force added when the player jumps.
-	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;	// How much to smooth out the movement
-	[SerializeField] private bool m_AirControl = false;							// Whether or not a player can steer while jumping;
+	[Range(0, .3f)] [SerializeField] private float m_MovementSmoothing = .05f;  // How much to smooth out the movement
+	[SerializeField] private float grabTime = .5f;
+	[SerializeField] private Player player;
+
 	[SerializeField] private LayerMask m_WhatIsGround;                          // A mask determining what is ground to the character
 	[SerializeField] private LayerMask m_WhatIsPlayer;
+	[SerializeField] private LayerMask m_WhatIsItem;
+
 	[SerializeField] private Transform m_GroundCheckA;                          // A position marking where to check if the player is grounded.
 	[SerializeField] private Transform m_GroundCheckB;                          // Same as above
 	[SerializeField] private Transform m_CeilingCheckA;                         // A position marking where to check is there another player above.
 	[SerializeField] private Transform m_CeilingCheckB;                         // Same as above
+	[SerializeField] private Transform m_GrabCheckA;							// A position marking where to check is there another player above.
+	[SerializeField] private Transform m_GrabCheckB;                            // Same as above
 
-	[SerializeField] private Collider2D m_AttackDisableCollider;				// A collider that will be disabled when Attacking
+	[SerializeField] private PrefabDataBase prefabDataBase;
 
-	const float k_GroundedDepth = .1f;  // Depth of the overlap line (area) to determine if grounded
-	const float k_CeilingDepth = .1f;  // Depth of the overlap line (area) to determine is there another player above.
-	public bool m_Grounded { private set; get; }            // Whether or not the player is grounded.
-	private bool m_JumpBloced;           // Whether or not the player jump is blocked by other player.
+
+	const float k_GroundedDepth = .1f;					// Depth of the overlap line (area) to determine if grounded
+	const float k_CeilingDepth = .1f;					// Depth of the overlap line (area) to determine is there another player above.
+	public bool m_Grounded { private set; get; }        // Whether or not the player is grounded.
+	private bool m_JumpBloced;                          // Whether or not the player jump is blocked by other player.
+	private bool m_ItemHeld = false;
 	private Rigidbody2D m_Rigidbody2D;
-	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
+	private bool m_FacingRight = true;					// For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
+
+
 
 	[Header("Events")]
 	[Space]
@@ -82,59 +93,54 @@ public class CharacterController2D : MonoBehaviour
 	}
 
 
-	public void Move(float move, bool Attack, bool jump)
+	public void Move(float move, bool attack, bool jump, bool grab)
 	{
-		//only control the player if grounded or airControl is turned on
-		if (m_Grounded || m_AirControl)
+		// If Attacking
+		if (attack)
 		{
-			// If Attacking
-			if (Attack)
+			if (!m_wasAttacking)
 			{
-				if (!m_wasAttacking)
-				{
-					m_wasAttacking = true;
-					OnAttackEvent.Invoke(true);
-				}
-
+				m_wasAttacking = true;
+				OnAttackEvent.Invoke(true);
 				// Freeze player in position
 				m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+			}
 
-				//// Disable one of the colliders when Attacking
-				//if (m_AttackDisableCollider != null)
-				//	m_AttackDisableCollider.enabled = false;
-			} else
+			//// Disable one of the colliders when Attacking
+			//if (m_AttackDisableCollider != null)
+			//	m_AttackDisableCollider.enabled = false;
+		} else
+		{
+			//// Enable the collider when not Attacking
+			//if (m_AttackDisableCollider != null)
+			//	m_AttackDisableCollider.enabled = true;
+
+			if (m_wasAttacking)
 			{
-				//// Enable the collider when not Attacking
-				//if (m_AttackDisableCollider != null)
-				//	m_AttackDisableCollider.enabled = true;
-
-				if (m_wasAttacking)
-				{
-					m_wasAttacking = false;
-					OnAttackEvent.Invoke(false);
-				}
-
+				m_wasAttacking = false;
+				OnAttackEvent.Invoke(false);
 				m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 			}
-
-			// Move the character by finding the target velocity
-			Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
-			// And then smoothing it out and applying it to the character
-			m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
-
-			// If the input is moving the player right and the player is facing left...
-			if (move > 0 && !m_FacingRight)
-			{
-				// ... flip the player.
-				Flip();
-			}
-			// Otherwise if the input is moving the player left and the player is facing right...
-			else if (move < 0 && m_FacingRight)
-			{
-				// ... flip the player.
-				Flip();
-			}
 		}
+
+		// Move the character by finding the target velocity
+		Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+		// And then smoothing it out and applying it to the character
+		m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+
+		// If the input is moving the player right and the player is facing left...
+		if (move > 0 && !m_FacingRight)
+		{
+			// ... flip the player.
+			Flip();
+		}
+		// Otherwise if the input is moving the player left and the player is facing right...
+		else if (move < 0 && m_FacingRight)
+		{
+			// ... flip the player.
+			Flip();
+		}
+
 		// If the player should jump...
 		if (m_Grounded && jump && !m_JumpBloced)
 		{
@@ -142,8 +148,23 @@ public class CharacterController2D : MonoBehaviour
 			m_Grounded = false;
 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
 		}
-	}
 
+		// If the player should grab...
+		if (grab && m_Grounded && !attack)
+		{	
+			if(m_ItemHeld)
+            {
+				//...trow held item
+				StartCoroutine(TrowItem(player.itemHeld, player.itemHeldColor));
+			}
+			else
+            {
+				//...try grab an item
+				Debug.Log("Grabing...");
+				StartCoroutine(TryGrabItem());
+			}
+        }
+	}
 
 	private void Flip()
 	{
@@ -154,5 +175,85 @@ public class CharacterController2D : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+	}
+
+	private IEnumerator TryGrabItem()
+    {
+		m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+		
+		Collider2D grabCollider = Physics2D.OverlapArea(m_GrabCheckA.position, m_GrabCheckB.position, m_WhatIsItem);
+		if(grabCollider != null && grabCollider.TryGetComponent(out Item grabbedItem))
+        {
+			yield return new WaitForSeconds(grabTime/4);
+			grabbedItem.GoToPlayer(player.transform.position, grabTime);
+			yield return new WaitForSeconds(grabTime*3/4);
+			player.SetMyItem(grabbedItem.MyItemType, grabbedItem.MyItemColor);
+			m_ItemHeld = true;
+		}
+		else
+        {
+			yield return new WaitForSeconds(grabTime);
+		}
+		
+		m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+		yield return null;
+    }
+
+	private IEnumerator TrowItem(ItemTypes itemType, ItemColors itemColor)
+	{
+		m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+
+		GameObject instantiatedObject = Instantiate(GiveItemPrefab(itemType, itemColor), transform.position, Quaternion.identity);
+		if(instantiatedObject.TryGetComponent(out Item trowedItem))
+        {
+			trowedItem.TrowMe(m_FacingRight, grabTime);
+        }
+		else
+        {
+			Debug.LogError("Instantiated object isn's an item!");
+        }
+        yield return new WaitForSeconds(grabTime);
+		m_ItemHeld = false;
+
+		m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+		yield return null;
+	}
+
+	private GameObject GiveItemPrefab(ItemTypes itemType, ItemColors itemColor)
+    {
+		switch (itemType)
+		{
+			case ItemTypes.Armor:
+				return prefabDataBase.armor;
+			case ItemTypes.Key:
+				switch (itemColor)
+				{
+					case ItemColors.Green:
+						return prefabDataBase.key.green;
+					case ItemColors.Blue:
+						return prefabDataBase.key.blue;
+					case ItemColors.Red:
+						return prefabDataBase.key.red;
+					default:
+						Debug.LogError("It shouldn't happen");
+						return null;
+				}
+			case ItemTypes.Crystal:
+				switch (itemColor)
+				{
+					case ItemColors.Green:
+						return prefabDataBase.crystal.green;
+					case ItemColors.Blue:
+						return prefabDataBase.crystal.blue;
+					case ItemColors.Red:
+						return prefabDataBase.crystal.red;
+					default:
+						Debug.LogError("It shouldn't happen");
+						return null;
+				}
+			default:
+				Debug.LogError("It shouldn't happen");
+				return null;
+		}
 	}
 }
