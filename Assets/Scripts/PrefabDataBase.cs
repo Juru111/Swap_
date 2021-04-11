@@ -6,7 +6,7 @@ public class PrefabDataBase : ScriptableObject
     [System.Serializable]
     public class ColoredThings
     {
-        public GameObject red;
+        public GameObject violet;
         public GameObject blue;
         public GameObject green;
     }

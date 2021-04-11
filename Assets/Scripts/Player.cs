@@ -6,17 +6,24 @@ public class Player : MonoBehaviour
 {
     [SerializeField]
     private InputConfig myInputConfig;
-
     [SerializeField]
     private CharacterController2D controller;
     [SerializeField]
     private Animator attackCircleAnimator;
     [SerializeField]
+    public GameObject itemHeldIndicator;
+    [SerializeField]
+    private SpriteRenderer itemHeldSpriteRenderer;
+    private GameManager gameManager;
+
+    [SerializeField]
     private float runSpeed = 40f;
     [SerializeField]
     private float jumpCooldown = 0.5f;
 
+    [field: SerializeField]
     public ItemTypes itemHeld { private set; get; } = ItemTypes.NONE;
+    [field: SerializeField]
     public ItemColors itemHeldColor { private set; get; } = ItemColors.NONE;
 
     private float h_Movement = 0f;
@@ -24,8 +31,21 @@ public class Player : MonoBehaviour
     private bool grab = false;
     private float jumpCooldownLeft = 0f;
     private bool isAttacking = false;
+    [SerializeField]
+    private bool isAlive = true;
+    [SerializeField]
+    private bool inToxic = false;
+    [SerializeField]
+    private float toxicationLevel;
+    [SerializeField]
+    private float maxToxicationLevel;
 
-    // Update is called once per frame
+
+    private void Awake()
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
+
     private void Update()
     {
         if (Input.GetKey(myInputConfig.JumpKey) && jumpCooldownLeft < 0)
@@ -51,6 +71,27 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(inToxic)
+        {
+            toxicationLevel += Time.deltaTime;
+            if(toxicationLevel > maxToxicationLevel)
+            {
+                KillMe();
+            }
+        }
+        else
+        {
+            if(toxicationLevel > 0f)
+            {
+                toxicationLevel -= Time.deltaTime*2;
+            }
+            else
+            {
+                toxicationLevel = 0f;
+            }
+        }
+
+
         CalculateHorizontalMovment();
         jumpCooldownLeft -= Time.fixedDeltaTime;
 
@@ -78,10 +119,45 @@ public class Player : MonoBehaviour
         h_Movement *= runSpeed;
     }
 
-    public void SetMyItem(ItemTypes itemType, ItemColors itemColor)
+    public void SetMyItem(ItemTypes itemType, ItemColors itemColor, Sprite itemSprite)
     {
-        itemHeld = itemType;
-        itemHeldColor = itemColor;
-        //tu mo¿na dodaæ te¿ w³¹cznie wizualnego indyfikatora trzymanego przedmiotu
+        if (itemType != ItemTypes.Marker)
+        {
+            itemHeld = itemType;
+            itemHeldColor = itemColor;
+            //tu mo¿na dodaæ te¿ w³¹cznie wizualnego indyfikatora trzymanego przedmiotu
+            if (itemType != ItemTypes.NONE)
+            {
+                itemHeldIndicator.SetActive(true);
+                itemHeldSpriteRenderer.sprite = itemSprite;
+            }
+            else
+            {
+                itemHeldIndicator.SetActive(false);
+            }
+        }
+        else
+        {
+            gameManager.AddPoints(1);
+        }
     }
+
+    public void KillMe()
+    {
+        
+        if(isAlive)
+        {
+            //puff particle
+            //zabicie (uktycie) playera
+            gameManager.LevelFailed();
+            isAlive = false;
+        }
+        
+    }
+
+    public void IsInToxic(bool _inToxic)
+    {
+        inToxic = _inToxic;
+    }
+
 }

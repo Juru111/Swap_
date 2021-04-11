@@ -6,6 +6,7 @@ using UnityEngine;
 public class Item : MonoBehaviour
 {
     protected Rigidbody2D myRigidbody2D;
+    public Sprite mySprite { protected set; get; }
 
     [SerializeField]
     protected ItemTypes myItemType = ItemTypes.NONE;
@@ -13,16 +14,19 @@ public class Item : MonoBehaviour
     protected ItemColors myItemColor = ItemColors.NONE;
     [SerializeField]
     protected float throwForce = 300f;
-    [SerializeField]
-    protected float throwDistance = 1f;
+    //[SerializeField]
+    //protected float throwDistance = 1f;
 
 
     public ItemTypes MyItemType => myItemType;
     public ItemColors MyItemColor => myItemColor;
 
-    private void Awake()
+    public bool isTaken { protected set; get; } = false;
+
+    protected void Awake()
     {
         myRigidbody2D = GetComponent<Rigidbody2D>();
+        mySprite = GetComponent<SpriteRenderer>().sprite;
     }
 
     public virtual void GoToPlayer(Vector2 goToPosition, float time)
@@ -36,6 +40,11 @@ public class Item : MonoBehaviour
     protected virtual void DestroyMe()
     {
         Destroy(gameObject);
+    }
+
+    public virtual void SetMyTakenStatus(bool _isTaken)
+    {
+        isTaken = _isTaken;
     }
 
     public virtual void TrowMe(bool isDirIsRight, float throwTime)

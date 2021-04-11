@@ -15,7 +15,7 @@ TagManager:
   - AttackCircle
   - Item
   - ItemGrabber
-  - 
+  - PlayerDetector
   - 
   - 
   - 
@@ -41,8 +41,17 @@ TagManager:
   - name: BackGround
     uniqueID: 1989771199
     locked: 0
+  - name: Field
+    uniqueID: 2986743215
+    locked: 0
   - name: AttackCircle
     uniqueID: 244799619
+    locked: 0
+  - name: ItemHolderIndicator
+    uniqueID: 2468635853
+    locked: 0
+  - name: ItemHolded
+    uniqueID: 850239511
     locked: 0
   - name: Default
     uniqueID: 0

@@ -175,6 +175,7 @@ public class CharacterController2D : MonoBehaviour
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
+		player.itemHeldIndicator.transform.localScale = theScale;
 	}
 
 	private IEnumerator TryGrabItem()
@@ -182,13 +183,17 @@ public class CharacterController2D : MonoBehaviour
 		m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
 		
 		Collider2D grabCollider = Physics2D.OverlapArea(m_GrabCheckA.position, m_GrabCheckB.position, m_WhatIsItem);
-		if(grabCollider != null && grabCollider.TryGetComponent(out Item grabbedItem))
+		if(grabCollider != null && grabCollider.TryGetComponent(out Item grabbedItem) && !grabbedItem.isTaken)
         {
+			grabbedItem.SetMyTakenStatus(true);
 			yield return new WaitForSeconds(grabTime/4);
 			grabbedItem.GoToPlayer(player.transform.position, grabTime);
 			yield return new WaitForSeconds(grabTime*3/4);
-			player.SetMyItem(grabbedItem.MyItemType, grabbedItem.MyItemColor);
-			m_ItemHeld = true;
+			player.SetMyItem(grabbedItem.MyItemType, grabbedItem.MyItemColor, grabbedItem.mySprite);
+            if (grabbedItem.MyItemType != ItemTypes.Marker)
+            {
+				m_ItemHeld = true;
+			}
 		}
 		else
         {
@@ -207,7 +212,8 @@ public class CharacterController2D : MonoBehaviour
 		if(instantiatedObject.TryGetComponent(out Item trowedItem))
         {
 			trowedItem.TrowMe(m_FacingRight, grabTime);
-        }
+			player.SetMyItem(ItemTypes.NONE, ItemColors.NONE, null);
+		}
 		else
         {
 			Debug.LogError("Instantiated object isn's an item!");
@@ -232,8 +238,8 @@ public class CharacterController2D : MonoBehaviour
 						return prefabDataBase.key.green;
 					case ItemColors.Blue:
 						return prefabDataBase.key.blue;
-					case ItemColors.Red:
-						return prefabDataBase.key.red;
+					case ItemColors.Violet:
+						return prefabDataBase.key.violet;
 					default:
 						Debug.LogError("It shouldn't happen");
 						return null;
@@ -245,8 +251,8 @@ public class CharacterController2D : MonoBehaviour
 						return prefabDataBase.crystal.green;
 					case ItemColors.Blue:
 						return prefabDataBase.crystal.blue;
-					case ItemColors.Red:
-						return prefabDataBase.crystal.red;
+					case ItemColors.Violet:
+						return prefabDataBase.crystal.violet;
 					default:
 						Debug.LogError("It shouldn't happen");
 						return null;

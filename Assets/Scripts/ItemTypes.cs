@@ -4,4 +4,5 @@ public enum ItemTypes
     Armor = 1,
     Key = 2,
     Crystal = 3,
+    Marker = 4,
 }
