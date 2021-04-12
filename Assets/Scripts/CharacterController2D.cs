@@ -96,7 +96,7 @@ public class CharacterController2D : MonoBehaviour
 	public void Move(float move, bool attack, bool jump, bool grab)
 	{
 		// If Attacking
-		if (attack)
+		if (attack && !m_ItemHeld)
 		{
 			if (!m_wasAttacking)
 			{
@@ -160,7 +160,6 @@ public class CharacterController2D : MonoBehaviour
 			else
             {
 				//...try grab an item
-				Debug.Log("Grabing...");
 				StartCoroutine(TryGrabItem());
 			}
         }

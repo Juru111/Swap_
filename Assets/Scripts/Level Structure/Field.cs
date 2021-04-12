@@ -13,11 +13,11 @@ public class Field : MonoBehaviour
         {
             if (!(player.itemHeld.Equals(ItemTypes.Crystal) && player.itemHeldColor.Equals(myColor)))
             {
-                player.IsInToxic(true);
+                player.SetInToxic(true);
             }
             else
             {
-                player.IsInToxic(false);
+                player.SetInToxic(false);
             }
         }
     }
@@ -25,7 +25,7 @@ public class Field : MonoBehaviour
     {
         if (collisionColider.TryGetComponent(out Player player))
         {
-            player.IsInToxic(false);
+            player.SetInToxic(false);
         }
     }
 }

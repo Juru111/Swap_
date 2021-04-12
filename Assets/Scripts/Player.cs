@@ -14,7 +14,11 @@ public class Player : MonoBehaviour
     public GameObject itemHeldIndicator;
     [SerializeField]
     private SpriteRenderer itemHeldSpriteRenderer;
+    [SerializeField]
+    private Collider2D attackCollider;
     private GameManager gameManager;
+    [SerializeField]
+    private ContactFilter2D destructableObjects = new ContactFilter2D();
 
     [SerializeField]
     private float runSpeed = 40f;
@@ -64,8 +68,18 @@ public class Player : MonoBehaviour
         attackCircleAnimator.SetBool("isAttacking", isAttacking);
         if (attackCircleAnimator.GetCurrentAnimatorStateInfo(0).IsName("AttackCircle_StayBig"))
         {
-            Debug.Log("ready to fire" + gameObject.name);
-            //ready to fire
+            if (Input.GetKeyUp(myInputConfig.AttackKey))
+            {
+                Collider2D[] attackedObjects = new Collider2D[8];
+                _ = attackCollider.OverlapCollider(destructableObjects, attackedObjects);
+                foreach (Collider2D collider in attackedObjects)
+                {
+                    if (collider != null && collider.TryGetComponent(out IDestroyable destroyable))
+                    {
+                        destroyable.AttackMe();
+                    }
+                }
+            }
         }
     }
 
@@ -155,7 +169,7 @@ public class Player : MonoBehaviour
         
     }
 
-    public void IsInToxic(bool _inToxic)
+    public void SetInToxic(bool _inToxic)
     {
         inToxic = _inToxic;
     }

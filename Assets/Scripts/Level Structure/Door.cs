@@ -15,8 +15,6 @@ public class Door : MonoBehaviour
     private Transform pointA;
     [SerializeField]
     private Transform pointB;
-    [SerializeField]
-    private Transform doorTransform;
 
     private bool isOnPointA = true;
     private bool inMove = false;
