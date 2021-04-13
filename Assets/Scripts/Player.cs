@@ -29,6 +29,8 @@ public class Player : MonoBehaviour
     public ItemTypes itemHeld { private set; get; } = ItemTypes.NONE;
     [field: SerializeField]
     public ItemColors itemHeldColor { private set; get; } = ItemColors.NONE;
+    [field: SerializeField]
+    public bool isHoldingItem { private set; get; } = false;
 
     private float h_Movement = 0f;
     private bool jump = false;
@@ -66,6 +68,7 @@ public class Player : MonoBehaviour
         }
 
         attackCircleAnimator.SetBool("isAttacking", isAttacking);
+        attackCircleAnimator.SetBool("isHoldingItem", isHoldingItem); 
         if (attackCircleAnimator.GetCurrentAnimatorStateInfo(0).IsName("AttackCircle_StayBig"))
         {
             if (Input.GetKeyUp(myInputConfig.AttackKey))
@@ -144,10 +147,12 @@ public class Player : MonoBehaviour
             {
                 itemHeldIndicator.SetActive(true);
                 itemHeldSpriteRenderer.sprite = itemSprite;
+                isHoldingItem = true; //characterControler ustawia t¹ wartoœæ na true nawet wczeœniej - w momencie zaatakowania (na potrzeby animatora)
             }
             else
             {
                 itemHeldIndicator.SetActive(false);
+                isHoldingItem = false;
             }
         }
         else
@@ -174,4 +179,8 @@ public class Player : MonoBehaviour
         inToxic = _inToxic;
     }
 
+    public void SetHoldingItem(bool _isHoldingItem)
+    {
+        isHoldingItem = _isHoldingItem;
+    }
 }

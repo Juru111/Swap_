@@ -13,8 +13,6 @@ public class Enemy : MonoBehaviour, IDestroyable
     private GameObject markerPrefab;
     private Vector3 target;
     [SerializeField]
-    private float moveTime = 5f;
-    [SerializeField]
     private float speed = 1;
 
     // Start is called before the first frame update
@@ -30,6 +28,14 @@ public class Enemy : MonoBehaviour, IDestroyable
         if(Vector3.Distance(transform.position, target) < 0.05)
         {
             SwitchTarget();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collisionCollider)
+    {
+        if (collisionCollider.TryGetComponent(out Player player))
+        {
+            player.KillMe();
         }
     }
 

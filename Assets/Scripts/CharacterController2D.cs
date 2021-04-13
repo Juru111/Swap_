@@ -27,7 +27,6 @@ public class CharacterController2D : MonoBehaviour
 	const float k_CeilingDepth = .1f;					// Depth of the overlap line (area) to determine is there another player above.
 	public bool m_Grounded { private set; get; }        // Whether or not the player is grounded.
 	private bool m_JumpBloced;                          // Whether or not the player jump is blocked by other player.
-	private bool m_ItemHeld = false;
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;					// For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
@@ -96,7 +95,7 @@ public class CharacterController2D : MonoBehaviour
 	public void Move(float move, bool attack, bool jump, bool grab)
 	{
 		// If Attacking
-		if (attack && !m_ItemHeld)
+		if (attack && !player.isHoldingItem)
 		{
 			if (!m_wasAttacking)
 			{
@@ -152,7 +151,7 @@ public class CharacterController2D : MonoBehaviour
 		// If the player should grab...
 		if (grab && m_Grounded && !attack)
 		{	
-			if(m_ItemHeld)
+			if(player.isHoldingItem)
             {
 				//...trow held item
 				StartCoroutine(TrowItem(player.itemHeld, player.itemHeldColor));
@@ -163,6 +162,28 @@ public class CharacterController2D : MonoBehaviour
 				StartCoroutine(TryGrabItem());
 			}
         }
+	}
+
+	public void WindMovement(Direction dir, float windSpeed)
+    {
+        switch (dir)
+        {
+            case Direction.Up:
+				Vector3 targetVelocity = new Vector2(m_Rigidbody2D.velocity.x, windSpeed * 10f);
+				m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
+				break;
+            case Direction.Left:
+                break;
+            case Direction.Right:
+                break;
+            default:
+				Debug.LogError("Wrong wind dirrection!");
+                break;
+        }
+        // Move the character by finding the target velocity
+        //Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+		// And then smoothing it out and applying it to the character
+		//m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 	}
 
 	private void Flip()
@@ -185,14 +206,16 @@ public class CharacterController2D : MonoBehaviour
 		if(grabCollider != null && grabCollider.TryGetComponent(out Item grabbedItem) && !grabbedItem.isTaken)
         {
 			grabbedItem.SetMyTakenStatus(true);
+			player.SetHoldingItem(true);
 			yield return new WaitForSeconds(grabTime/4);
 			grabbedItem.GoToPlayer(player.transform.position, grabTime);
 			yield return new WaitForSeconds(grabTime*3/4);
 			player.SetMyItem(grabbedItem.MyItemType, grabbedItem.MyItemColor, grabbedItem.mySprite);
-            if (grabbedItem.MyItemType != ItemTypes.Marker)
+			if(grabbedItem.MyItemType == ItemTypes.Marker)
             {
-				m_ItemHeld = true;
+				player.SetHoldingItem(false);
 			}
+
 		}
 		else
         {
@@ -218,7 +241,6 @@ public class CharacterController2D : MonoBehaviour
 			Debug.LogError("Instantiated object isn's an item!");
         }
         yield return new WaitForSeconds(grabTime);
-		m_ItemHeld = false;
 
 		m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 		yield return null;
