@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 7362246703710800084, guid: 8e622662bf670e74f8c98c16e2967167, type: 3}
+  m_Sprite: {fileID: 3571918853351263293, guid: 04c5666c431f5fa44a7c1a233a71b6fc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd20d4438c6b44841a9e8f17d9327457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myColor: 2
+  myColor: 1
   moveDoorTime: 1
   rotateFactor: 0
   pointA: {fileID: 1620859659836362742}
@@ -187,7 +187,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1620859659535231759}
   m_Layer: 0
-  m_Name: BlueDoor
+  m_Name: GreenDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
