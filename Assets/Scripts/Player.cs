@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Animator attackCircleAnimator;
     [SerializeField]
+    private Animator spriteAnimator;
+    [SerializeField]
     public GameObject itemHeldIndicator;
     [SerializeField]
     private SpriteRenderer itemHeldSpriteRenderer;
@@ -84,6 +86,13 @@ public class Player : MonoBehaviour
                 }
             }
         }
+        spriteAnimator.SetFloat("Speed", Mathf.Abs(h_Movement));
+        spriteAnimator.SetBool("IsInAir", !controller.m_Grounded);
+        spriteAnimator.SetBool("IsGoingUp", controller.m_IsGoingUp);
+        spriteAnimator.SetBool("IsAttacking", isAttacking);
+        spriteAnimator.SetBool("IsGrabing", controller.m_IsGrabing);
+        spriteAnimator.SetBool("StartGrab", grab);
+        spriteAnimator.SetBool("IsHoldingItem", isHoldingItem);
     }
 
     void FixedUpdate()
@@ -118,9 +127,16 @@ public class Player : MonoBehaviour
             jump = false;
             jumpCooldownLeft = jumpCooldown;
         }
+
+
+        
+
         isAttacking = false;
         grab = false;
+
+        
     }
+
 
     private void CalculateHorizontalMovment()
     {

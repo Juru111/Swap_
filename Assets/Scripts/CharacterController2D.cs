@@ -26,6 +26,8 @@ public class CharacterController2D : MonoBehaviour
 	const float k_GroundedDepth = .1f;					// Depth of the overlap line (area) to determine if grounded
 	const float k_CeilingDepth = .1f;					// Depth of the overlap line (area) to determine is there another player above.
 	public bool m_Grounded { private set; get; }        // Whether or not the player is grounded.
+	public bool m_IsGoingUp { private set; get; }
+	public bool m_IsGrabing { private set; get; }
 	private bool m_JumpBloced;                          // Whether or not the player jump is blocked by other player.
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;					// For determining which way the player is currently facing.
@@ -42,6 +44,8 @@ public class CharacterController2D : MonoBehaviour
 	public class BoolEvent : UnityEvent<bool> { }
 
 	public BoolEvent OnAttackEvent;
+	public BoolEvent IsInAirEvent;
+	public BoolEvent IsGoingUpInAirEvent;
 	private bool m_wasAttacking = false;
 
 	private void Awake()
@@ -53,6 +57,9 @@ public class CharacterController2D : MonoBehaviour
 
 		if (OnAttackEvent == null)
 			OnAttackEvent = new BoolEvent();
+
+		if (IsInAirEvent == null)
+			IsInAirEvent = new BoolEvent();
 
 		m_GroundCheckB.position += new Vector3(0f, k_GroundedDepth, 0f); // Adding depth to line of ground check => area check
 		m_CeilingCheckB.position -= new Vector3(0f, k_CeilingDepth, 0f); // Adding depth to line of celling check => area check
@@ -71,12 +78,13 @@ public class CharacterController2D : MonoBehaviour
 			if (groundColliders[i].gameObject != gameObject)
 			{
 				m_Grounded = true;
-				if (!wasGrounded)
-					OnLandEvent.Invoke();
+				if (wasGrounded != m_Grounded)
+                {
+					IsInAirEvent.Invoke(m_Grounded);
+				}
 			}
 		}
-
-
+		
 
 		m_JumpBloced = false;
 
@@ -89,6 +97,9 @@ public class CharacterController2D : MonoBehaviour
 				m_JumpBloced = true;
 			}
 		}
+
+		m_IsGoingUp = (m_Rigidbody2D.velocity.y >= 0);
+
 	}
 
 
@@ -200,6 +211,7 @@ public class CharacterController2D : MonoBehaviour
 
 	private IEnumerator TryGrabItem()
     {
+		m_IsGrabing = true;
 		m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
 		
 		Collider2D grabCollider = Physics2D.OverlapArea(m_GrabCheckA.position, m_GrabCheckB.position, m_WhatIsItem);
@@ -223,6 +235,7 @@ public class CharacterController2D : MonoBehaviour
 		}
 		
 		m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
+		m_IsGrabing = false;
 		yield return null;
     }
 
