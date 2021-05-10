@@ -18,7 +18,8 @@ public class Player : MonoBehaviour
     private SpriteRenderer itemHeldSpriteRenderer;
     [SerializeField]
     private Collider2D attackCollider;
-    private GameManager gameManager;
+    [SerializeField]
+    private LevelEventHandler levelEventHandler;
     [SerializeField]
     private ContactFilter2D destructableObjects = new ContactFilter2D();
 
@@ -47,12 +48,6 @@ public class Player : MonoBehaviour
     private float toxicationLevel;
     [SerializeField]
     private float maxToxicationLevel;
-
-
-    private void Awake()
-    {
-        gameManager = FindObjectOfType<GameManager>();
-    }
 
     private void Update()
     {
@@ -173,7 +168,7 @@ public class Player : MonoBehaviour
         }
         else
         {
-            gameManager.AddPoints(1);
+            levelEventHandler.AddPoints(1);
         }
     }
 
@@ -184,7 +179,9 @@ public class Player : MonoBehaviour
         {
             //puff particle
             //zabicie (uktycie) playera
-            gameManager.LevelFailed();
+            //gameManager.LevelFailed();
+            //LevelEventHandler.LevelFailed();
+            ScenesManager.SM.ReloadLevel();
             isAlive = false;
         }
         
