@@ -55,17 +55,31 @@ public class Player : MonoBehaviour
         {
             jump = true;
         }
+        else
+        {
+            jump = false;
+        }
+
         if (Input.GetKey(myInputConfig.AttackKey))
         {
             isAttacking = true;
         }
+        else
+        {
+            isAttacking = false;
+        }
+
         if (Input.GetKeyDown(myInputConfig.GrabKey))
         {
             grab = true;
         }
+        else
+        {
+            grab = false;
+        }
 
         attackCircleAnimator.SetBool("isAttacking", isAttacking);
-        attackCircleAnimator.SetBool("isHoldingItem", isHoldingItem); 
+        attackCircleAnimator.SetBool("isHoldingItem", isHoldingItem);
         if (attackCircleAnimator.GetCurrentAnimatorStateInfo(0).IsName("AttackCircle_StayBig"))
         {
             if (Input.GetKeyUp(myInputConfig.AttackKey))
@@ -80,6 +94,10 @@ public class Player : MonoBehaviour
                     }
                 }
             }
+        }
+        else
+        {
+            
         }
         spriteAnimator.SetFloat("Speed", Mathf.Abs(h_Movement));
         spriteAnimator.SetBool("IsInAir", !controller.m_Grounded);
@@ -126,8 +144,8 @@ public class Player : MonoBehaviour
 
         
 
-        isAttacking = false;
-        grab = false;
+        //isAttacking = false;
+        //grab = false;
 
         
     }

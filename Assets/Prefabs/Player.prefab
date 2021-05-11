@@ -71,7 +71,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 244799619
-  m_SortingLayer: -1
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
   m_Color: {r: 1, g: 0.2783019, b: 0.2783019, a: 0.44705883}
@@ -218,7 +218,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 850239511
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: db750325989564987a34393247d883b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -522,6 +522,7 @@ MonoBehaviour:
   itemHeldIndicator: {fileID: 7165404886663764536}
   itemHeldSpriteRenderer: {fileID: 7544458814475044432}
   attackCollider: {fileID: 1885097758339953547}
+  levelEventHandler: {fileID: 0}
   destructableObjects:
     useTriggers: 1
     useLayerMask: 1
@@ -538,6 +539,7 @@ MonoBehaviour:
     maxNormalAngle: 0
   runSpeed: 40
   jumpCooldown: 0.1
+  attackingCooldown: 0.2
   <itemHeld>k__BackingField: 0
   <itemHeldColor>k__BackingField: 0
   <isHoldingItem>k__BackingField: 0
@@ -645,7 +647,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -776902825
-  m_SortingLayer: 3
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d995f1bd910d6ce4b9a0659d600fbd5c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -747,7 +749,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1826331443
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.57254905}

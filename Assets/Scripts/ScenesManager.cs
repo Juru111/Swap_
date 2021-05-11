@@ -11,7 +11,8 @@ public class ScenesManager : MonoBehaviour
     {
         if (SM != null)
         {
-            Destroy(SM);
+            Destroy(gameObject);
+            return;
         } 
         else
         {

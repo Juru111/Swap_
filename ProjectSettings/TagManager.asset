@@ -53,6 +53,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: FrontDefault
+    uniqueID: 1693350941
+    locked: 0
   - name: ItemHolderIndicator
     uniqueID: 2468635853
     locked: 0

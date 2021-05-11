@@ -32,6 +32,7 @@ public class CharacterController2D : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;					// For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
+	private float windHorizontalMove = 0;
 
 
 
@@ -103,18 +104,19 @@ public class CharacterController2D : MonoBehaviour
 	}
 
 
-	public void Move(float move, bool attack, bool jump, bool grab)
+	public void Move(float move, bool attacking, bool jump, bool grab)
 	{
 		// If Attacking
-		if (attack && !player.isHoldingItem)
+		if (attacking && !player.isHoldingItem)
 		{
 			if (!m_wasAttacking)
 			{
 				m_wasAttacking = true;
 				OnAttackEvent.Invoke(true);
-				// Freeze player in position
-				m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+				
 			}
+			// Freeze player in position
+			m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
 
 			//// Disable one of the colliders when Attacking
 			//if (m_AttackDisableCollider != null)
@@ -132,9 +134,10 @@ public class CharacterController2D : MonoBehaviour
 				m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 			}
 		}
+		Debug.Log(player.itemHeld + " " + m_Rigidbody2D.constraints);
 
 		// Move the character by finding the target velocity
-		Vector3 targetVelocity = new Vector2(move * 10f, m_Rigidbody2D.velocity.y);
+		Vector3 targetVelocity = new Vector2((move + windHorizontalMove) * 10f, m_Rigidbody2D.velocity.y);
 		// And then smoothing it out and applying it to the character
 		m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 
@@ -160,7 +163,7 @@ public class CharacterController2D : MonoBehaviour
 		}
 
 		// If the player should grab...
-		if (grab && m_Grounded && !attack)
+		if (grab && m_Grounded && !attacking)
 		{	
 			if(player.isHoldingItem)
             {
@@ -177,16 +180,16 @@ public class CharacterController2D : MonoBehaviour
 
 	public void WindMovement(Direction dir, float windSpeed)
     {
-        switch (dir)
+		Vector3 targetVelocity;
+		switch (dir)
         {
             case Direction.Up:
-				Vector3 targetVelocity = new Vector2(m_Rigidbody2D.velocity.x, windSpeed * 10f);
+				targetVelocity = new Vector2(m_Rigidbody2D.velocity.x, windSpeed * 10f);
 				m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 				break;
-            case Direction.Left:
-                break;
             case Direction.Right:
-                break;
+				windHorizontalMove = windSpeed;
+				break;
             default:
 				Debug.LogError("Wrong wind dirrection!");
                 break;

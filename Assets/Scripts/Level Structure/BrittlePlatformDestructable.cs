@@ -11,7 +11,8 @@ public class BrittlePlatformDestructable : MonoBehaviour, IDestroyable
     {
         if (!mainBrittlePlatform.isInCorr)
         {
-            mainBrittlePlatform.BrittleMe(0, mainBrittlePlatform.unBrittleTime);
+            Debug.Log("Brettle by attack");
+            StartCoroutine(mainBrittlePlatform.BrittleMe(0, mainBrittlePlatform.unBrittleTime));
         }
     }
 }

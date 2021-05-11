@@ -6,8 +6,7 @@ public enum Direction
 {
     NONE = 0,
     Up = 1,
-    Left = 2,
-    Right = 3,
+    Right = 2,
 }
 
 public class WindFlow : MonoBehaviour
@@ -20,12 +19,19 @@ public class WindFlow : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collisionColider)
     {
         if (collisionColider.TryGetComponent(out CharacterController2D playerControler)
-            && collisionColider.TryGetComponent(out Player player))
+            && collisionColider.TryGetComponent(out Player player)
+            && !player.itemHeld.Equals(ItemTypes.Armor))
         {
-            if (!player.itemHeld.Equals(ItemTypes.Armor))
-            {
-                playerControler.WindMovement(myDirection, windSpeed);
-            }
+            playerControler.WindMovement(myDirection, windSpeed);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.TryGetComponent(out CharacterController2D playerControler)
+        && collision.TryGetComponent(out Player player))
+        {
+            playerControler.WindMovement(myDirection, 0);
         }
     }
 }
