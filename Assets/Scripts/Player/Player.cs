@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
     private bool grab = false;
     private float jumpCooldownLeft = 0f;
     private bool isAttacking = false;
+    private bool attackReady = false;
     [SerializeField]
     private bool isAlive = true;
     [SerializeField]
@@ -73,15 +74,14 @@ public class Player : MonoBehaviour
         {
             grab = true;
         }
-        else
-        {
-            grab = false;
-        }
+        
 
         attackCircleAnimator.SetBool("isAttacking", isAttacking);
         attackCircleAnimator.SetBool("isHoldingItem", isHoldingItem);
         if (attackCircleAnimator.GetCurrentAnimatorStateInfo(0).IsName("AttackCircle_StayBig"))
         {
+            attackReady = true;
+            //moment of dealing damage
             if (Input.GetKeyUp(myInputConfig.AttackKey))
             {
                 Collider2D[] attackedObjects = new Collider2D[8];
@@ -93,6 +93,7 @@ public class Player : MonoBehaviour
                         destroyable.AttackMe();
                     }
                 }
+                attackReady = false;
             }
         }
         else
@@ -134,7 +135,7 @@ public class Player : MonoBehaviour
         CalculateHorizontalMovment();
         jumpCooldownLeft -= Time.fixedDeltaTime;
 
-        controller.Move(h_Movement * Time.fixedDeltaTime, isAttacking, jump, grab);
+        controller.Move(h_Movement * Time.fixedDeltaTime, isAttacking, attackReady , jump, grab);
         if(jump)
         {
             jump = false;
@@ -145,7 +146,7 @@ public class Player : MonoBehaviour
         
 
         //isAttacking = false;
-        //grab = false;
+        grab = false;
 
         
     }

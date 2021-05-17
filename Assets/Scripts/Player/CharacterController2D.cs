@@ -104,7 +104,7 @@ public class CharacterController2D : MonoBehaviour
 	}
 
 
-	public void Move(float move, bool attacking, bool jump, bool grab)
+	public void Move(float move, bool attacking, bool attackReady, bool jump, bool grab)
 	{
 		// If Attacking
 		if (attacking && !player.isHoldingItem)
@@ -115,9 +115,12 @@ public class CharacterController2D : MonoBehaviour
 				OnAttackEvent.Invoke(true);
 				
 			}
-			// Freeze player in position
-			m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
-
+			// Freeze player in position when attack is fully charged up
+			if(attackReady)
+            {
+				m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+			}
+			
 			//// Disable one of the colliders when Attacking
 			//if (m_AttackDisableCollider != null)
 			//	m_AttackDisableCollider.enabled = false;
@@ -134,7 +137,7 @@ public class CharacterController2D : MonoBehaviour
 				m_Rigidbody2D.constraints = RigidbodyConstraints2D.FreezeRotation;
 			}
 		}
-		Debug.Log(player.itemHeld + " " + m_Rigidbody2D.constraints);
+		
 
 		// Move the character by finding the target velocity
 		Vector3 targetVelocity = new Vector2((move + windHorizontalMove) * 10f, m_Rigidbody2D.velocity.y);
