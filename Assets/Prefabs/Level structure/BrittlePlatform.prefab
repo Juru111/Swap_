@@ -47,7 +47,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.01}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -58,8 +58,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 0.25}
-  m_EdgeRadius: 0.02
+  m_Size: {x: 1.49, y: 0.25}
+  m_EdgeRadius: 0
 --- !u!50 &5601503546494773628
 Rigidbody2D:
   serializedVersion: 4
@@ -95,8 +95,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   platformSpriteRenderer: {fileID: 5601503546761509808}
   platformCollider: {fileID: 5601503546761509811}
-  brittleTime: 1
-  <unBrittleTime>k__BackingField: 3
+  brittleTime: 0.6
+  <unBrittleTime>k__BackingField: 1.7
 --- !u!1 &5601503546761509820
 GameObject:
   m_ObjectHideFlags: 0
@@ -172,7 +172,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -1213683306657132012, guid: e87cadce8c7b43248b854a0221182566, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.9339623, g: 0.8909385, b: 0.81501424, a: 1}
   m_FlipX: 0
   m_FlipY: 1
   m_DrawMode: 2

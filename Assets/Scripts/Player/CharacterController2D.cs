@@ -62,8 +62,8 @@ public class CharacterController2D : MonoBehaviour
 		if (IsInAirEvent == null)
 			IsInAirEvent = new BoolEvent();
 
-		m_GroundCheckB.position += new Vector3(0f, k_GroundedDepth, 0f); // Adding depth to line of ground check => area check
-		m_CeilingCheckB.position -= new Vector3(0f, k_CeilingDepth, 0f); // Adding depth to line of celling check => area check
+		m_GroundCheckB.position -= new Vector3(0f, k_GroundedDepth, 0f); // Adding depth to line of ground check => area check
+		m_CeilingCheckB.position += new Vector3(0f, k_CeilingDepth, 0f); // Adding depth to line of celling check => area check
 	}
 
 	private void FixedUpdate()
@@ -99,7 +99,7 @@ public class CharacterController2D : MonoBehaviour
 			}
 		}
 
-		m_IsGoingUp = (m_Rigidbody2D.velocity.y >= 0);
+		m_IsGoingUp = (m_Rigidbody2D.velocity.y >= 0.1);
 
 	}
 
@@ -113,7 +113,6 @@ public class CharacterController2D : MonoBehaviour
 			{
 				m_wasAttacking = true;
 				OnAttackEvent.Invoke(true);
-				
 			}
 			// Freeze player in position when attack is fully charged up
 			if(attackReady)

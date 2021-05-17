@@ -155,13 +155,16 @@ public class Player : MonoBehaviour
     private void CalculateHorizontalMovment()
     {
         h_Movement = 0f;
-        if (Input.GetKey(myInputConfig.LeftKey))
+        if (!isAttacking)
         {
-            h_Movement--;
-        }
-        if (Input.GetKey(myInputConfig.RightKey))
-        {
-            h_Movement++;
+            if (Input.GetKey(myInputConfig.LeftKey))
+            {
+                h_Movement--;
+            }
+            if (Input.GetKey(myInputConfig.RightKey))
+            {
+                h_Movement++;
+            }
         }
         h_Movement *= runSpeed;
     }
@@ -200,8 +203,12 @@ public class Player : MonoBehaviour
             //zabicie (uktycie) playera
             //gameManager.LevelFailed();
             //LevelEventHandler.LevelFailed();
-            ScenesManager.SM.ReloadLevel();
+            if(ScenesManager.SM != null)
+            {
+                ScenesManager.SM.ReloadLevel();
+            }
             isAlive = false;
+            Debug.Log("Player Dead");
         }
         
     }

@@ -33,10 +33,12 @@ public class Door : MonoBehaviour
     private void MoveDoor(float time)
     {
         inMove = true;
-        Sequence moveDoor;
+        Sequence moveDoor = DOTween.Sequence();
+        moveDoor.SetUpdate(UpdateType.Fixed);
         if (isOnPointA)
         {
             moveDoor = DOTween.Sequence();
+            moveDoor.SetUpdate(UpdateType.Fixed);
             moveDoor.Append(transform.DOMove(pointB.position, time));
             moveDoor.Insert(0, transform.DORotate(new Vector3(0, 0, 90 * rotateFactor), time, RotateMode.LocalAxisAdd));
             moveDoor.OnComplete(MoveComplete);
@@ -45,6 +47,7 @@ public class Door : MonoBehaviour
         else
         {
             moveDoor = DOTween.Sequence();
+            moveDoor.SetUpdate(UpdateType.Fixed);
             moveDoor.Append(transform.DOMove(pointA.position, time));
             moveDoor.Insert(0, transform.DORotate(new Vector3(0, 0, 90 * -rotateFactor), time, RotateMode.LocalAxisAdd));
             moveDoor.OnComplete(MoveComplete);

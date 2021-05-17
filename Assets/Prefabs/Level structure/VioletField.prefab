@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5249296276757746118}
   - component: {fileID: 5249296276757746119}
   m_Layer: 10
-  m_Name: BlueField
+  m_Name: VioletField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: -1308224081
   m_SortingLayer: -3
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4983939709045208906, guid: ba617e640af986946950242f1ccb7f28, type: 3}
+  m_Sprite: {fileID: 433511066448776161, guid: 347811b5e7def27479cd88605da71e17, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,18 +98,18 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0048179626, y: -0.0048707128}
+  m_Offset: {x: 0.007254362, y: 0.024352789}
   m_SpriteTilingProperty:
     border: {x: 0.28583333, y: 0.28, z: 0.26583335, w: 0.29500002}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.7625, y: 0.75416666}
+    oldSize: {x: 0.7625, y: 0.7633333}
     newSize: {x: 4.1142607, y: 3.7415636}
     adaptiveTilingThreshold: 0.5
     drawMode: 1
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.765966, y: 3.3006134}
+  m_Size: {x: 3.669619, y: 3.3395777}
   m_EdgeRadius: 0
 --- !u!50 &5249296276757746118
 Rigidbody2D:
@@ -144,4 +144,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 567b4b9c1a498694da3391a10e0610e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myColor: 2
+  myColor: 3

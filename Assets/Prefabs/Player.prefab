@@ -420,8 +420,8 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.955, y: 0.955}
+  m_EdgeRadius: 0.015
 --- !u!58 &1838315728042652671
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -539,14 +539,13 @@ MonoBehaviour:
     maxNormalAngle: 0
   runSpeed: 40
   jumpCooldown: 0.1
-  attackingCooldown: 0.2
   <itemHeld>k__BackingField: 0
   <itemHeldColor>k__BackingField: 0
   <isHoldingItem>k__BackingField: 0
   isAlive: 1
   inToxic: 0
   toxicationLevel: 0
-  maxToxicationLevel: 2
+  maxToxicationLevel: 1.7
 --- !u!1 &5528018741478281140
 GameObject:
   m_ObjectHideFlags: 0
