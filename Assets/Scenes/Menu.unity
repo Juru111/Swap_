@@ -1525,7 +1525,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffaac3282b1cbe45ac262280b0cf67b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: 8
+  sceneToLoad: 10
 --- !u!114 &1110631389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1565,7 +1565,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1110631390}
   m_OnClick:
     m_PersistentCalls:
@@ -2559,7 +2559,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ffaac3282b1cbe45ac262280b0cf67b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: 8
+  sceneToLoad: 9
 --- !u!114 &1521981977
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2599,7 +2599,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 0
+  m_Interactable: 1
   m_TargetGraphic: {fileID: 1521981978}
   m_OnClick:
     m_PersistentCalls:

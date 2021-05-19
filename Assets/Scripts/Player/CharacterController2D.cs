@@ -23,7 +23,7 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private PrefabDataBase prefabDataBase;
 
 
-	const float k_GroundedDepth = .1f;					// Depth of the overlap line (area) to determine if grounded
+	const float k_GroundedDepth = .05f;					// Depth of the overlap line (area) to determine if grounded
 	const float k_CeilingDepth = .1f;					// Depth of the overlap line (area) to determine is there another player above.
 	public bool m_Grounded { private set; get; }        // Whether or not the player is grounded.
 	public bool m_IsGoingUp { private set; get; }
