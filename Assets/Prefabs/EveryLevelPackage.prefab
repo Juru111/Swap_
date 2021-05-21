@@ -45,6 +45,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player1: {fileID: 5947685071888512915}
   player2: {fileID: 7769235719839705602}
+  swapParticlePrefab: {fileID: 782688660498839725, guid: 98bdac3f3ca572b4d84409240efc3d07, type: 3}
 --- !u!1 &8962006705251450372
 GameObject:
   m_ObjectHideFlags: 0
@@ -89,6 +90,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsOnLevel: 0
+  pointsToComplete: 0
+  nextScene: 0
 --- !u!1 &9089661554004847954
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,6 +9,8 @@ public class LevelEventHandler : MonoBehaviour
     [SerializeField]
     private int pointsToComplete;
     [SerializeField]
+    private int thisLevelInt;
+    [SerializeField]
     private ScenesManager.Scenes nextScene;
 
     public void AddPoints(int _points)
@@ -29,6 +31,10 @@ public class LevelEventHandler : MonoBehaviour
 
     public void LevelCompleted()
     {
+        if(PlayerPrefs.GetInt("mostLevelCompleted", 0) < thisLevelInt)
+        {
+            PlayerPrefs.SetInt("mostLevelCompleted", thisLevelInt);
+        }
         //okno congratsów -> guzik next -> kolejny level / podsumowanie gry
         ScenesManager.SM.LoadScene(nextScene);
     }

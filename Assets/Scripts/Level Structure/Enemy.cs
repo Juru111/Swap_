@@ -11,6 +11,8 @@ public class Enemy : MonoBehaviour, IDestroyable
     private Transform pointB;
     [SerializeField]
     private GameObject markerPrefab;
+    [SerializeField]
+    private GameObject enemyParticlePrefab;
     private Vector3 target;
     [SerializeField]
     private float speed = 1;
@@ -54,6 +56,7 @@ public class Enemy : MonoBehaviour, IDestroyable
     public void AttackMe()
     {
         Instantiate(markerPrefab, transform.position, Quaternion.identity);
+        Instantiate(enemyParticlePrefab, transform.position, Quaternion.identity);
         gameObject.SetActive(false);
     }
 }

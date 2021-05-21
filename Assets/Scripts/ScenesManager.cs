@@ -56,6 +56,37 @@ public class ScenesManager : MonoBehaviour
                     break;
             }
         }
+        if(currentScene==Scenes.Menu)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                LoadScene(Scenes.Level1);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                LoadScene(Scenes.Level2);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                LoadScene(Scenes.Level3);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                LoadScene(Scenes.Level4);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                LoadScene(Scenes.Level5);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                LoadScene(Scenes.Level6);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                LoadScene(Scenes.Level7);
+            }
+        }
     }
 
     [field: SerializeField]
@@ -99,6 +130,13 @@ public class ScenesManager : MonoBehaviour
         currentScene = sceneToLoad;
         animator.Play("Fade_End");
     }
+    #endregion
+
+    #region GameCompletion
+    [field: SerializeField]
+    public int mostLevelCompleted { private set; get; } = 0;
+
+    
     #endregion
 
 }

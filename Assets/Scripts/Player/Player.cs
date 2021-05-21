@@ -24,6 +24,11 @@ public class Player : MonoBehaviour
     private ContactFilter2D destructableObjects = new ContactFilter2D();
 
     [SerializeField]
+    private GameObject deathParticlePrefab;
+    [SerializeField]
+    private GameObject attackParticlePrefab;
+
+    [SerializeField]
     private float runSpeed = 40f;
     [SerializeField]
     private float jumpCooldown = 0.5f;
@@ -81,9 +86,11 @@ public class Player : MonoBehaviour
         if (attackCircleAnimator.GetCurrentAnimatorStateInfo(0).IsName("AttackCircle_StayBig"))
         {
             attackReady = true;
+
             //moment of dealing damage
             if (Input.GetKeyUp(myInputConfig.AttackKey))
             {
+                Instantiate(attackParticlePrefab, transform.position, Quaternion.identity);
                 Collider2D[] attackedObjects = new Collider2D[8];
                 _ = attackCollider.OverlapCollider(destructableObjects, attackedObjects);
                 foreach (Collider2D collider in attackedObjects)
@@ -200,15 +207,18 @@ public class Player : MonoBehaviour
         if(isAlive)
         {
             //puff particle
+            Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
             //zabicie (uktycie) playera
+            
             //gameManager.LevelFailed();
             //LevelEventHandler.LevelFailed();
-            if(ScenesManager.SM != null)
+            if (ScenesManager.SM != null)
             {
                 ScenesManager.SM.ReloadLevel();
             }
             isAlive = false;
             Debug.Log("Player Dead");
+            gameObject.SetActive(false);
         }
         
     }

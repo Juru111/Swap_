@@ -9,30 +9,59 @@ public class BrittlePlatform : MonoBehaviour
     [SerializeField]
     private Collider2D platformCollider;
     [SerializeField]
+    private GameObject brittleParticle;
+    [SerializeField]
     private float brittleTime = 1f;
     [field: SerializeField]
     public float unBrittleTime { private set; get; } = 3f;
-    public bool isInCorr { private set; get; } = false;
+    public bool isBrittling { private set; get; } = false;
+
+    private int playerInCount = 0;
 
     private void OnTriggerEnter2D(Collider2D collisionColider)
     {
-        if (collisionColider.TryGetComponent(out Player player) && !isInCorr)
+        if (collisionColider.TryGetComponent(out Player player))
         {
-            StartCoroutine(BrittleMe(brittleTime, unBrittleTime));
+            playerInCount++;
+            if(!isBrittling)
+            {
+                StartCoroutine(BrittleMe(brittleTime, unBrittleTime));
+            } 
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collisionColider)
+    {
+        if (collisionColider.TryGetComponent(out Player player))
+        {
+            playerInCount--;
         }
     }
 
+
     public IEnumerator BrittleMe(float _brittleTime, float _unBrittleTime)
     {
-        isInCorr = true;
+        isBrittling = true;
 
-        yield return new WaitForSeconds(_brittleTime); //podzieliæ na mniejsze kawa³ki - ró¿ne sprite-y
+        brittleParticle.SetActive(true);
+        yield return new WaitForSeconds(_brittleTime/2);
+        brittleParticle.SetActive(true);
+        yield return new WaitForSeconds(_brittleTime/2);
+        brittleParticle.SetActive(true);
         platformCollider.enabled = false;
         platformSpriteRenderer.enabled = false;
+        while(playerInCount > 0)
+        {
+            yield return null;
+        }
+        StartCoroutine(UnBrittleMe(_unBrittleTime));
+
+        isBrittling = false;
+    }
+
+    public IEnumerator UnBrittleMe(float _unBrittleTime)
+    {
         yield return new WaitForSeconds(_unBrittleTime);
         platformCollider.enabled = true;
         platformSpriteRenderer.enabled = true;
-
-        isInCorr = false;
     }
 }

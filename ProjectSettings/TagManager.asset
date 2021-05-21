@@ -71,3 +71,6 @@ TagManager:
   - name: Item
     uniqueID: 2857476843
     locked: 0
+  - name: FrontParticle
+    uniqueID: 1374052907
+    locked: 0

@@ -9,7 +9,7 @@ public class BrittlePlatformDestructable : MonoBehaviour, IDestroyable
 
     public void AttackMe()
     {
-        if (!mainBrittlePlatform.isInCorr)
+        if (!mainBrittlePlatform.isBrittling)
         {
             Debug.Log("Brettle by attack");
             StartCoroutine(mainBrittlePlatform.BrittleMe(0, mainBrittlePlatform.unBrittleTime));

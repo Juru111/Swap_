@@ -224,9 +224,9 @@ public class CharacterController2D : MonoBehaviour
         {
 			grabbedItem.SetMyTakenStatus(true);
 			player.SetHoldingItem(true);
-			yield return new WaitForSeconds(grabTime/4);
+			yield return new WaitForSeconds(grabTime/3);
 			grabbedItem.GoToPlayer(player.transform.position, grabTime);
-			yield return new WaitForSeconds(grabTime*3/4);
+			yield return new WaitForSeconds(grabTime*2/3);
 			player.SetMyItem(grabbedItem.MyItemType, grabbedItem.MyItemColor, grabbedItem.mySprite);
 			if(grabbedItem.MyItemType == ItemTypes.Marker)
             {

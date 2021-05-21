@@ -11,6 +11,8 @@ public class SwapManager : MonoBehaviour
     Vector3 previous1Positon;
     Vector2 previosu1Velocity;
 
+    [SerializeField] private GameObject swapParticlePrefab;
+
     private bool swap = false;
 
     private void Awake()
@@ -33,6 +35,9 @@ public class SwapManager : MonoBehaviour
         {
             previous1Positon = player1.transform.position;
             previosu1Velocity = rb2Dplayer1.velocity;
+
+            Instantiate(swapParticlePrefab, player1.transform.position, Quaternion.identity);
+            Instantiate(swapParticlePrefab, player2.transform.position, Quaternion.identity);
 
             player1.transform.position = player2.transform.position;
             player2.transform.position = previous1Positon;

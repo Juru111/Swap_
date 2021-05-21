@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: 4adeaf2d2b1c7417e89f026626d8264f, type: 3}
-  m_Color: {r: 1, g: 0.2783019, b: 0.2783019, a: 0.44705883}
+  m_Color: {r: 1, g: 0.8691807, b: 0.6179246, a: 0.4470588}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -537,6 +537,8 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  deathParticlePrefab: {fileID: 4290435314710787595, guid: 7fa9c48e03a215c46957ce0e0f08b814, type: 3}
+  attackParticlePrefab: {fileID: 6146878312899389106, guid: 3282664b2784fb04fb5bfaf0023eabf1, type: 3}
   runSpeed: 40
   jumpCooldown: 0.1
   <itemHeld>k__BackingField: 0

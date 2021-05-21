@@ -132,7 +132,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1049028199
-  m_SortingLayer: 4
+  m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 8596640243658272642, guid: a3570be507ec2204eaa4200e29778828, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -197,6 +197,7 @@ MonoBehaviour:
   pointA: {fileID: 3716465020815483732}
   pointB: {fileID: 3716465019897708422}
   markerPrefab: {fileID: 6646049209507372890, guid: 9d9b36003fed36145963e1fd5b3e964d, type: 3}
+  enemyParticlePrefab: {fileID: 8011317977037434166, guid: 7728b8d2c95a4a446b0f36c745582967, type: 3}
   speed: 1
 --- !u!1 &3716465020928841167
 GameObject:
