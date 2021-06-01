@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6646049209507372871}
   - component: {fileID: 6646049209507372870}
   - component: {fileID: 6646049209507372869}
-  - component: {fileID: 6646049209507372868}
+  - component: {fileID: -8874445742733013284}
   m_Layer: 8
   m_Name: Marker
   m_TagString: Untagged
@@ -122,7 +122,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &6646049209507372868
+--- !u!114 &-8874445742733013284
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,7 +131,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6646049209507372890}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8e2f0edd8efe154aba2b9fd67e3cee1, type: 3}
+  m_Script: {fileID: 11500000, guid: 0dd28d9feb3323a4aa11adb59c5e0c32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   myItemType: 4

@@ -90,6 +90,7 @@ public class Player : MonoBehaviour
             //moment of dealing damage
             if (Input.GetKeyUp(myInputConfig.AttackKey))
             {
+                GameManager.GM.SoundManager.PlaySound(SoundTypes.Atack);
                 Instantiate(attackParticlePrefab, transform.position, Quaternion.identity);
                 Collider2D[] attackedObjects = new Collider2D[8];
                 _ = attackCollider.OverlapCollider(destructableObjects, attackedObjects);
@@ -140,6 +141,8 @@ public class Player : MonoBehaviour
 
 
         CalculateHorizontalMovment();
+ 
+
         jumpCooldownLeft -= Time.fixedDeltaTime;
 
         controller.Move(h_Movement * Time.fixedDeltaTime, isAttacking, attackReady , jump, grab);
@@ -206,15 +209,16 @@ public class Player : MonoBehaviour
         
         if(isAlive)
         {
+            GameManager.GM.SoundManager.PlaySound(SoundTypes.PlayerDeath);
             //puff particle
             Instantiate(deathParticlePrefab, transform.position, Quaternion.identity);
             //zabicie (uktycie) playera
             
             //gameManager.LevelFailed();
             //LevelEventHandler.LevelFailed();
-            if (ScenesManager.SM != null)
+            if (GameManager.GM != null)
             {
-                ScenesManager.SM.ReloadLevel();
+                GameManager.GM.ReloadLevel();
             }
             isAlive = false;
             Debug.Log("Player Dead");

@@ -55,6 +55,7 @@ public class Enemy : MonoBehaviour, IDestroyable
 
     public void AttackMe()
     {
+        GameManager.GM.SoundManager.PlaySound(SoundTypes.EnemyDeath);
         Instantiate(markerPrefab, transform.position, Quaternion.identity);
         Instantiate(enemyParticlePrefab, transform.position, Quaternion.identity);
         gameObject.SetActive(false);

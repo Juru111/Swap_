@@ -23,7 +23,7 @@ public class CharacterController2D : MonoBehaviour
 	[SerializeField] private PrefabDataBase prefabDataBase;
 
 
-	const float k_GroundedDepth = .05f;					// Depth of the overlap line (area) to determine if grounded
+	const float k_GroundedDepth = .01f;					// Depth of the overlap line (area) to determine if grounded
 	const float k_CeilingDepth = .1f;					// Depth of the overlap line (area) to determine is there another player above.
 	public bool m_Grounded { private set; get; }        // Whether or not the player is grounded.
 	public bool m_IsGoingUp { private set; get; }
@@ -111,6 +111,7 @@ public class CharacterController2D : MonoBehaviour
 		{
 			if (!m_wasAttacking)
 			{
+				GameManager.GM.SoundManager.PlaySound(SoundTypes.ChargingAtack);
 				m_wasAttacking = true;
 				OnAttackEvent.Invoke(true);
 			}
@@ -143,6 +144,11 @@ public class CharacterController2D : MonoBehaviour
 		// And then smoothing it out and applying it to the character
 		m_Rigidbody2D.velocity = Vector3.SmoothDamp(m_Rigidbody2D.velocity, targetVelocity, ref m_Velocity, m_MovementSmoothing);
 
+		if (move != 0 && m_Grounded)
+		{
+			GameManager.GM.SoundManager.PlaySound(SoundTypes.PlayerStep);
+		}
+
 		// If the input is moving the player right and the player is facing left...
 		if (move > 0 && !m_FacingRight)
 		{
@@ -162,6 +168,7 @@ public class CharacterController2D : MonoBehaviour
 			// Add a vertical force to the player.
 			m_Grounded = false;
 			m_Rigidbody2D.AddForce(new Vector2(0f, m_JumpForce));
+			GameManager.GM.SoundManager.PlaySound(SoundTypes.Jump);
 		}
 
 		// If the player should grab...
@@ -175,6 +182,7 @@ public class CharacterController2D : MonoBehaviour
 			else
             {
 				//...try grab an item
+				GameManager.GM.SoundManager.PlaySound(SoundTypes.Grab);
 				StartCoroutine(TryGrabItem());
 			}
         }

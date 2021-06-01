@@ -25,6 +25,7 @@ public class Door : MonoBehaviour
         {
             if (player.itemHeld.Equals(ItemTypes.Key) && player.itemHeldColor.Equals(myColor))
             {
+                GameManager.GM.SoundManager.PlaySound(SoundTypes.DoorStart);
                 MoveDoor(moveDoorTime);
             }
         }

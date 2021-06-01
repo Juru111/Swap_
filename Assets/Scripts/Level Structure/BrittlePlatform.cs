@@ -42,10 +42,12 @@ public class BrittlePlatform : MonoBehaviour
     {
         isBrittling = true;
 
+        GameManager.GM.SoundManager.PlaySound(SoundTypes.Brittle);
         brittleParticle.SetActive(true);
         yield return new WaitForSeconds(_brittleTime/2);
         brittleParticle.SetActive(true);
         yield return new WaitForSeconds(_brittleTime/2);
+        GameManager.GM.SoundManager.PlaySound(SoundTypes.BrittleEnd);
         brittleParticle.SetActive(true);
         platformCollider.enabled = false;
         platformSpriteRenderer.enabled = false;

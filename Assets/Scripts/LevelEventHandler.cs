@@ -11,7 +11,8 @@ public class LevelEventHandler : MonoBehaviour
     [SerializeField]
     private int thisLevelInt;
     [SerializeField]
-    private ScenesManager.Scenes nextScene;
+    private GameManager.Scenes nextScene;
+    private bool levelComplete = false;
 
     public void AddPoints(int _points)
     {
@@ -24,29 +25,38 @@ public class LevelEventHandler : MonoBehaviour
 
     public void LevelFailed()
     {
-        Debug.Log("End");
-        //okno restrtu -> restart poziomu
-        ScenesManager.SM.ReloadLevel();
+        if(!levelComplete)
+        {
+            Debug.Log("End");
+            //okno restrtu -> restart poziomu
+            GameManager.GM.ReloadLevel();
+        }
     }
 
     public void LevelCompleted()
     {
+        levelComplete = true;
         if(PlayerPrefs.GetInt("mostLevelCompleted", 0) < thisLevelInt)
         {
             PlayerPrefs.SetInt("mostLevelCompleted", thisLevelInt);
+            GameManager.GM.SoundManager.PlaySound(SoundTypes.LevelComplete);
+            GameManager.GM.LoadScene(nextScene, 1.1f, "Next Level Unlocked!");
+        }
+        else
+        {
+            GameManager.GM.LoadScene(nextScene);
         }
         //okno congratsów -> guzik next -> kolejny level / podsumowanie gry
-        ScenesManager.SM.LoadScene(nextScene);
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if(ScenesManager.SM != null)
+            if(GameManager.GM != null)
             {
                 Debug.Log("in reload");
-                ScenesManager.SM.ReloadLevel();
+                GameManager.GM.ReloadLevel();
             }
             else
             {

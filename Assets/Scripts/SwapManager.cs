@@ -33,6 +33,7 @@ public class SwapManager : MonoBehaviour
     {
         if(swap)
         {
+            GameManager.GM.SoundManager.PlaySound(SoundTypes.Swap);
             previous1Positon = player1.transform.position;
             previosu1Velocity = rb2Dplayer1.velocity;
 

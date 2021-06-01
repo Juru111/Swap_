@@ -540,7 +540,7 @@ MonoBehaviour:
   deathParticlePrefab: {fileID: 4290435314710787595, guid: 7fa9c48e03a215c46957ce0e0f08b814, type: 3}
   attackParticlePrefab: {fileID: 6146878312899389106, guid: 3282664b2784fb04fb5bfaf0023eabf1, type: 3}
   runSpeed: 40
-  jumpCooldown: 0.1
+  jumpCooldown: 0.2
   <itemHeld>k__BackingField: 0
   <itemHeldColor>k__BackingField: 0
   <isHoldingItem>k__BackingField: 0
