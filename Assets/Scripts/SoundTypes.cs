@@ -23,4 +23,5 @@
         MarkerPickUp = 44,
         BrittleEnd = 45,
         LevelComplete = 46,
+        GameComplete = 47,
     }

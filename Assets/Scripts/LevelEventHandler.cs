@@ -11,8 +11,9 @@ public class LevelEventHandler : MonoBehaviour
     [SerializeField]
     private int thisLevelInt;
     [SerializeField]
-    private GameManager.Scenes nextScene;
+    private GameManager.ScenesTypes nextScene;
     private bool levelComplete = false;
+    private SoundManager SoundManager = GameManager.GM.SoundManager;
 
     public void AddPoints(int _points)
     {
@@ -38,16 +39,24 @@ public class LevelEventHandler : MonoBehaviour
         levelComplete = true;
         if(PlayerPrefs.GetInt("mostLevelCompleted", 0) < thisLevelInt)
         {
+            GameManager.GM.SetLevelComletion(thisLevelInt);
             PlayerPrefs.SetInt("mostLevelCompleted", thisLevelInt);
-            GameManager.GM.SoundManager.PlaySound(SoundTypes.LevelComplete);
-            GameManager.GM.LoadScene(nextScene, 1.1f, "Next Level Unlocked!");
+            if (thisLevelInt == 7)
+            {
+                //SoundManager.TurnMusicDown(2.2f, 0.9f);
+                SoundManager.PlaySound(SoundTypes.GameComplete);
+                GameManager.GM.LoadScene(nextScene, 1.8f, "Game Complete!");
+                return;
+            }
+            SoundManager.PlaySound(SoundTypes.LevelComplete);
+            GameManager.GM.LoadScene(nextScene, 1.1f, "Next Level Unlocked");
         }
         else
         {
             GameManager.GM.LoadScene(nextScene);
         }
-        //okno congratsów -> guzik next -> kolejny level / podsumowanie gry
     }
+
 
     private void Update()
     {

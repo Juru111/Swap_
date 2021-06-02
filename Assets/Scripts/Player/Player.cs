@@ -215,11 +215,11 @@ public class Player : MonoBehaviour
             //zabicie (uktycie) playera
             
             //gameManager.LevelFailed();
-            //LevelEventHandler.LevelFailed();
-            if (GameManager.GM != null)
-            {
-                GameManager.GM.ReloadLevel();
-            }
+            levelEventHandler.LevelFailed();
+            //if (GameManager.GM != null)
+            //{
+            //    GameManager.GM.ReloadLevel();
+            //}
             isAlive = false;
             Debug.Log("Player Dead");
             gameObject.SetActive(false);

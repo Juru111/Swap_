@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LoadLevelButton : MonoBehaviour
 {
-    public GameManager.Scenes sceneToLoad;
+    public GameManager.ScenesTypes sceneToLoad;
     private int mostLevelCompleted = 0;
     private Button myButton;
     private int myLevelInt;
@@ -22,25 +22,25 @@ public class LoadLevelButton : MonoBehaviour
 
         switch (sceneToLoad)
         {
-            case GameManager.Scenes.Level1:
+            case GameManager.ScenesTypes.Level1:
                 myLevelInt = 1;
                 break;
-            case GameManager.Scenes.Level2:
+            case GameManager.ScenesTypes.Level2:
                 myLevelInt = 2;
                 break;
-            case GameManager.Scenes.Level3:
+            case GameManager.ScenesTypes.Level3:
                 myLevelInt = 3;
                 break;
-            case GameManager.Scenes.Level4:
+            case GameManager.ScenesTypes.Level4:
                 myLevelInt = 4;
                 break;
-            case GameManager.Scenes.Level5:
+            case GameManager.ScenesTypes.Level5:
                 myLevelInt = 5;
                 break;
-            case GameManager.Scenes.Level6:
+            case GameManager.ScenesTypes.Level6:
                 myLevelInt = 6;
                 break;
-            case GameManager.Scenes.Level7:
+            case GameManager.ScenesTypes.Level7:
                 myLevelInt = 7;
                 break;
             default:

@@ -5,12 +5,9 @@ using UnityEngine.UI;
 
 public partial class SoundManager : MonoBehaviour
 {
-    [SerializeField]
-    private float sfxVolume = 0.6f;
-    private float musicVolume = 0.6f;
-    [SerializeField]
+    private float sfxVolume = 0.3f;
+    private float musicVolume = 0.4f;
     private Slider sfxSlider;
-    [SerializeField]
     private Slider musicSlider;
     private GameObject oneShotGameObject;
     private AudioSource oneShotAudioSource;
@@ -29,10 +26,15 @@ public partial class SoundManager : MonoBehaviour
 
         sfxVolume = PlayerPrefs.GetFloat("SfxVolume", sfxVolume);
         musicVolume = PlayerPrefs.GetFloat("MusicVolume", musicVolume);
-        
-        //sfxSlider.value = sfxVolume;
-        //musicSlider.value = musicVolume;
+
+        RefreshAudioSliders();
         AdjustMusicVolume(musicVolume);
+    }
+
+    public void RefreshAudioSliders()
+    {
+        sfxSlider.value = sfxVolume;
+        musicSlider.value = musicVolume;
     }
 
     public void PlaySound(SoundTypes soundType)
@@ -45,7 +47,7 @@ public partial class SoundManager : MonoBehaviour
                 oneShotAudioSource = oneShotGameObject.AddComponent<AudioSource>();
             }
 
-            oneShotAudioSource.volume = sfxVolume;
+            oneShotAudioSource.volume = sfxVolume/2;
             var audioClipToPlay = GiveAudioClip(soundType);
             if(audioClipToPlay != null)
             {
@@ -111,6 +113,23 @@ public partial class SoundManager : MonoBehaviour
         return null;
     }
 
+    public void TurnMusicDown(float time, float factor = 0.5f)
+    {
+        StartCoroutine(TurnMusicDownCorr(time, factor));
+    }
+
+    private IEnumerator TurnMusicDownCorr(float time, float factor)
+    {
+        float currMusicVolume = GiveMusicVolume();
+        float currSfxVolume = GiveSfxVolume();
+        AdjustMusicVolume(currMusicVolume * (1- factor));
+        AdjustSfxVolume(currSfxVolume * 4);
+        yield return new WaitForSeconds(time);
+        AdjustMusicVolume(currMusicVolume);
+        AdjustSfxVolume(currSfxVolume);
+        yield return null;
+    }
+
     public float GiveSfxVolume()
     {
         return sfxVolume;
@@ -130,6 +149,12 @@ public partial class SoundManager : MonoBehaviour
     {
         musicVolume = _volume;
         GameManager.GM.AdjustMusicVolume(musicVolume);
+    }
+
+    public void SetMyAudioSliders(Slider _sfxSlider, Slider _musicSlider) // To nie jest dobre omijanie problemu singletona :c
+    {
+        sfxSlider = _sfxSlider;
+        musicSlider = _musicSlider;
     }
 
     [System.Serializable]

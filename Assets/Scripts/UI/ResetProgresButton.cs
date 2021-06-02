@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class QuitButton : MonoBehaviour
+public class ResetProgresButton : MonoBehaviour
 {
-    public void ApplicationQuitCall()
+    public void ResetCall()
     {
         GameManager.GM.SoundManager.PlaySound(SoundTypes.ButtonClick);
-        Debug.Log("Quitnig...");
-        Application.Quit();
+        GameManager.GM.ResetGameCompletion();
     }
 }

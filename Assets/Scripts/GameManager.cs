@@ -6,15 +6,124 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    private void Awake()
+    {
+        DoSingletonLogic();
+        GM.WindowsManager = FindObjectOfType<WindowsManager>();
+        mostLevelCompleted = PlayerPrefs.GetInt("mostLevelCompleted", 0);
+    }
+    private void Update()
+    {
+        HandleEscKey();
+        if (currentScene == ScenesTypes.Menu)
+        {
+            HandleNumericCheats();
+            HandleNumericKeys();
+        }
+    }
+
+    private void HandleEscKey()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            switch (currentScene)
+            {
+                case ScenesTypes.Menu:
+                    if(WindowsManager.CurrWindow == WindowTypes.NONE)
+                    {
+                        Debug.Log("Quitnig...");
+                        Application.Quit();
+                    }
+                    else
+                    {
+                        WindowsManager.CloseWindow();
+                    }
+                    return;
+                default:
+                    LoadScene(ScenesTypes.Menu);
+                    break;
+            }
+
+        }
+    }
+
+    private void HandleNumericCheats()
+    {
+        if(Input.GetKey(KeyCode.LeftShift))
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                LoadScene(ScenesTypes.Level1);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                LoadScene(ScenesTypes.Level2);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha3))
+            {
+                LoadScene(ScenesTypes.Level3);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                LoadScene(ScenesTypes.Level4);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                LoadScene(ScenesTypes.Level5);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                LoadScene(ScenesTypes.Level6);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha7))
+            {
+                LoadScene(ScenesTypes.Level7);
+            }
+        }
+    }
+
+    private void HandleNumericKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1) && mostLevelCompleted >= 0)
+        {
+            LoadScene(ScenesTypes.Level1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && mostLevelCompleted >= 1)
+        {
+            LoadScene(ScenesTypes.Level2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3) && mostLevelCompleted >= 2)
+        {
+            LoadScene(ScenesTypes.Level3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4) && mostLevelCompleted >= 3)
+        {
+            LoadScene(ScenesTypes.Level4);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha5) && mostLevelCompleted >= 4)
+        {
+            LoadScene(ScenesTypes.Level5);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha6) && mostLevelCompleted >= 5)
+        {
+            LoadScene(ScenesTypes.Level6);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha7) && mostLevelCompleted >= 6)
+        {
+            LoadScene(ScenesTypes.Level7);
+        }
+    }
+
     #region Singleton
     public static GameManager GM;
-    void Awake()
+    private void DoSingletonLogic()
     {
         if (GM != null)
         {
-            Destroy(gameObject);
+            //GM = this;
+            Destroy(gameObject); // pocz¹tkowa tylko ta linijka
             return;
-        } 
+        }
         else
         {
             GM = this;
@@ -29,7 +138,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private TMP_Text loadLevelText;
 
-    public enum Scenes
+    public enum ScenesTypes
     {
         NONE,
         Menu,
@@ -44,74 +153,26 @@ public class GameManager : MonoBehaviour
         Level7
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            switch (currentScene)
-            {
-                case Scenes.Menu:
-                    Debug.Log("Quitnig...");
-                    Application.Quit();
-                    return;
-                default:
-                    LoadScene(Scenes.Menu);
-                    break;
-            }
-        }
-        if(currentScene==Scenes.Menu)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                LoadScene(Scenes.Level1);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                LoadScene(Scenes.Level2);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                LoadScene(Scenes.Level3);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha4))
-            {
-                LoadScene(Scenes.Level4);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha5))
-            {
-                LoadScene(Scenes.Level5);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha6))
-            {
-                LoadScene(Scenes.Level6);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha7))
-            {
-                LoadScene(Scenes.Level7);
-            }
-        }
-    }
-
     [field: SerializeField]
-    public Scenes currentScene { get; private set; } = Scenes.Menu;
+    public ScenesTypes currentScene { get; private set; } = ScenesTypes.Menu;
 
     public void ReloadLevel()
     {
         switch (currentScene)
         {
-            case Scenes.NONE:
+            case ScenesTypes.NONE:
                 Debug.Log("currScene = NONE");
                 break;
-            case Scenes.SampleScene:
-            case Scenes.Menu:
+            case ScenesTypes.SampleScene:
+            case ScenesTypes.Menu:
                 break;
-            case Scenes.Level1:
-            case Scenes.Level2:
-            case Scenes.Level3:
-            case Scenes.Level4:
-            case Scenes.Level5:
-            case Scenes.Level6:
-            case Scenes.Level7:
+            case ScenesTypes.Level1:
+            case ScenesTypes.Level2:
+            case ScenesTypes.Level3:
+            case ScenesTypes.Level4:
+            case ScenesTypes.Level5:
+            case ScenesTypes.Level6:
+            case ScenesTypes.Level7:
                 LoadScene(currentScene);
                 break;
             default:
@@ -120,7 +181,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void LoadScene(Scenes sceneToLoad, float waitInFade = 0.2f, string loadString = "Swap")
+    public void LoadScene(ScenesTypes sceneToLoad, float waitInFade = 0.2f, string loadString = "Swap")
     {
         if(waitInFade == 0.2f)
         {
@@ -129,7 +190,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(LoadSceneAnimation(sceneToLoad, waitInFade, loadString));
     }
 
-    IEnumerator LoadSceneAnimation(Scenes sceneToLoad, float waitInFade, string loadString)
+    IEnumerator LoadSceneAnimation(ScenesTypes sceneToLoad, float waitInFade, string loadString)
     {
         loadLevelText.text = loadString;
         animator.Play("Fade_Start");
@@ -143,6 +204,20 @@ public class GameManager : MonoBehaviour
     #region GameCompletion
     [field: SerializeField]
     public int mostLevelCompleted { private set; get; } = 0;
+
+    public void ResetGameCompletion()
+    {
+        PlayerPrefs.SetInt("mostLevelCompleted", 0);
+        LoadScene(ScenesTypes.Menu);
+    }
+
+    public void SetLevelComletion(int levelCompleted)
+    {
+        if(levelCompleted > mostLevelCompleted)
+        {
+            mostLevelCompleted = levelCompleted;
+        }
+    }
     #endregion
 
     #region Music
@@ -151,11 +226,16 @@ public class GameManager : MonoBehaviour
 
     public void AdjustMusicVolume(float _volume)
     {
-        musicSource.volume = _volume;
+        musicSource.volume = _volume/2;
     }
     #endregion
 
     #region Sound
     public SoundManager SoundManager;
+    #endregion
+
+    #region WindowManager
+    [SerializeField]
+    public WindowsManager WindowsManager;
     #endregion
 }
